@@ -1,0 +1,40 @@
+{
+  "extends": "airbnb-base",
+  "env": {
+    "mocha": true
+  },
+  "rules": {
+    "import/no-unresolved": 0,
+    "no-console": 0,
+    "comma-dangle": 0,
+    "import/no-extraneous-dependencies": 0,
+    "no-param-reassign": [
+      "error",
+      {
+        "props": false
+      }
+    ],
+    "object-shorthand": [
+      "error",
+      "never"
+    ],
+    "consistent-return": 2,
+    "no-underscore-dangle": 0,
+    "no-implicit-coercion": [
+      "error",
+      {
+        "boolean": true,
+        "number": true,
+        "string": true,
+        "allow": []
+      }
+    ],
+    "newline-per-chained-call": 0,
+    "arrow-body-style": 0,
+    "arrow-parens": 0,
+    "padded-blocks": 0,
+    "no-empty-pattern": 0,
+    "no-continue": 0,
+    "no-restricted-syntax":0
+  }
+}
