@@ -4,9 +4,10 @@ const request = require('supertest');
 const app = require('../../app');
 const config = require('../../src/config');
 
-describe('Posts controller', () => {
+const _token = config.get('token');
+const _badtoken = 'sgdsgd';
 
-  const _token = config.get('token');
+describe('Posts controller', () => {
 
   it('should fetch all posts', () => {
     return request(app)
@@ -23,8 +24,6 @@ describe('Posts controller', () => {
       .get('/api/posts')
       .expect(501);
   });
-
-  const _badtoken = 'sgdsgd';
 
   it('should return an error when invalid token is specified', () => {
     return request(app)
@@ -85,5 +84,18 @@ describe('Posts controller', () => {
       .delete('/api/posts/1')
       .set('Authorization', `Bearer ${_token}`)
       .expect(200);
+  });
+});
+
+describe('Collection controller', () => {
+  it('should fetch a collection of 30 items', () => {
+    return request(app)
+      .get('/api/collection')
+      .set('Authorization', `Bearer ${_token}`)
+      .expect(200)
+      .then((data) => {
+        assert(Array.isArray(data.body));
+        assert.lengthOf(data.body, 30);
+      });
   });
 });

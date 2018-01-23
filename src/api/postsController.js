@@ -1,23 +1,11 @@
 const _ = require('lodash');
-
 const fetch = require('node-fetch');
+
 const config = require('../config');
-
-function status(response) {
-  if (response.status >= 200 && response.status < 300) {
-    return Promise.resolve(response);
-  }
-  const err = new Error(response.statusText);
-  err.status = response.status;
-  return Promise.reject(err);
-}
-
-function json(response) {
-  return response.json();
-}
+const { status, json } = require('./fetchHelpers');
 
 function listAll(req, res, next) {
-  fetch(`${config.get('dataSource')}/posts`)
+  return fetch(`${config.get('dataSource')}/posts`)
     .then(status)
     .then(json)
     .then((data) => {
@@ -27,7 +15,7 @@ function listAll(req, res, next) {
 }
 
 function getById(req, res, next) {
-  fetch(`${config.get('dataSource')}/posts/${req.params.id}`)
+  return fetch(`${config.get('dataSource')}/posts/${req.params.id}`)
     .then(status)
     .then(json)
     .then((data) => {
@@ -37,7 +25,7 @@ function getById(req, res, next) {
 }
 
 function create(req, res, next) {
-  fetch(`${config.get('dataSource')}/posts`, {
+  return fetch(`${config.get('dataSource')}/posts`, {
     method: 'POST',
     body: JSON.stringify({
       title: req.body.title,
@@ -65,7 +53,7 @@ function update(req, res, next) {
   if (req.body.userId) {
     _.assign(body, { userId: req.body.userId });
   }
-  fetch(`${config.get('dataSource')}/posts/${req.params.id}`, {
+  return fetch(`${config.get('dataSource')}/posts/${req.params.id}`, {
     method: 'PUT',
     body: JSON.stringify(body),
     headers: {
@@ -79,7 +67,7 @@ function update(req, res, next) {
 }
 
 function del(req, res, next) {
-  fetch(`${config.get('dataSource')}/posts/${req.params.id}`, {
+  return fetch(`${config.get('dataSource')}/posts/${req.params.id}`, {
     method: 'DELETE'
   }).then(json)
     .then((data) => {
