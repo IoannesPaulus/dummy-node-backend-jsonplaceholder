@@ -96,6 +96,9 @@ describe('Collection controller', () => {
       .then((data) => {
         assert(Array.isArray(data.body));
         assert.lengthOf(data.body, 30);
+        assert.exists(data.body[5].post);
+        assert.exists(data.body[6].album);
+        assert.exists(data.body[24].user);
       });
   });
 });
