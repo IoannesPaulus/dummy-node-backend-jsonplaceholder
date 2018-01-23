@@ -17,7 +17,7 @@ npm run test
 ### Endpoints:
 * Always use Authentication header 'Bearer af24353tdsfw'
    * In case it's missing or invalid the server response will be a HTTP 501 (probably should be 401 though)
-* Posts CRUD examples
+## Posts CRUD examples
 ```
 GET http://localhost:3000/api/posts
 ```
@@ -43,7 +43,7 @@ PUT http://localhost:3000/api/posts/1
 ```
 DELETE http://localhost:3000/api/posts/1
 ```
-* Collection example
+## Collection example
 ```
 GET http://localhost:3000/api/collection
 ```
