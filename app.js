@@ -5,6 +5,7 @@ const config = require('./src/config');
 const logger = require('./src/logger');
 const routes = require('./src/api/router');
 const tokenMiddleware = require('./src/api/middleware/tokenMiddleware');
+const cacheMiddleware = require('./src/api/middleware/cacheMiddleware');
 
 const app = express();
 app.use(bodyParser.json());
@@ -12,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(tokenMiddleware(config.get('token')));
 
-app.use('/', routes);
+app.use('/', cacheMiddleware(10), routes);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
