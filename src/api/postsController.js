@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const fetch = require('node-fetch');
 const config = require('../config');
 
@@ -5,14 +7,16 @@ function status(response) {
   if (response.status >= 200 && response.status < 300) {
     return Promise.resolve(response);
   }
-  return Promise.reject(new Error(response.statusText));
+  const err = new Error(response.statusText);
+  err.status = response.status;
+  return Promise.reject(err);
 }
 
 function json(response) {
   return response.json();
 }
 
-function getPosts(req, res, next) {
+function listAll(req, res, next) {
   fetch(`${config.get('dataSource')}/posts`)
     .then(status)
     .then(json)
@@ -22,6 +26,72 @@ function getPosts(req, res, next) {
     .catch(next);
 }
 
+function getById(req, res, next) {
+  fetch(`${config.get('dataSource')}/posts/${req.params.id}`)
+    .then(status)
+    .then(json)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch(next);
+}
+
+function create(req, res, next) {
+  fetch(`${config.get('dataSource')}/posts`, {
+    method: 'POST',
+    body: JSON.stringify({
+      title: req.body.title,
+      body: req.body.body,
+      userId: req.body.userId
+    }),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8'
+    }
+  }).then(json)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch(next);
+}
+
+function update(req, res, next) {
+  const body = {};
+  if (req.body.title) {
+    _.assign(body, { title: req.body.title });
+  }
+  if (req.body.body) {
+    _.assign(body, { body: req.body.body });
+  }
+  if (req.body.userId) {
+    _.assign(body, { userId: req.body.userId });
+  }
+  fetch(`${config.get('dataSource')}/posts/${req.params.id}`, {
+    method: 'PUT',
+    body: JSON.stringify(body),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8'
+    }
+  }).then(json)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch(next);
+}
+
+function del(req, res, next) {
+  fetch(`${config.get('dataSource')}/posts/${req.params.id}`, {
+    method: 'DELETE'
+  }).then(json)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch(next);
+}
+
 module.exports = {
-  getPosts: getPosts
+  listAll: listAll,
+  getById: getById,
+  create: create,
+  update: update,
+  delete: del
 };

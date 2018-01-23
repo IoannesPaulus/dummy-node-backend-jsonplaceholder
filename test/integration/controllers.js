@@ -32,4 +32,58 @@ describe('Posts controller', () => {
       .set('Authorization', `Bearer ${_badtoken}`)
       .expect(501);
   });
+
+  it('should fetch one post', () => {
+    return request(app)
+      .get('/api/posts/1')
+      .set('Authorization', `Bearer ${_token}`)
+      .expect(200)
+      .then((data) => {
+        assert.equal(data.body.userId, 1);
+      });
+  });
+
+  it('should not find post', () => {
+    return request(app)
+      .get('/api/posts/101')
+      .set('Authorization', `Bearer ${_token}`)
+      .expect(404);
+  });
+
+  it('should create a post', () => {
+    return request(app)
+      .post('/api/posts')
+      .send({
+        title: 'foo',
+        body: 'bar',
+        userId: 1
+      })
+      .set('Authorization', `Bearer ${_token}`)
+      .expect(200)
+      .then((data) => {
+        assert.equal(data.body.id, 101);
+      });
+  });
+
+  it('should update a post', () => {
+    return request(app)
+      .put('/api/posts/1')
+      .send({
+        title: 'foo',
+        body: 'bar',
+        userId: 1
+      })
+      .set('Authorization', `Bearer ${_token}`)
+      .expect(200)
+      .then((data) => {
+        assert.equal(data.body.userId, 1);
+      });
+  });
+
+  it('should delete a post', () => {
+    return request(app)
+      .delete('/api/posts/1')
+      .set('Authorization', `Bearer ${_token}`)
+      .expect(200);
+  });
 });
