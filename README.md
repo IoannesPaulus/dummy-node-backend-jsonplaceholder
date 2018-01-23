@@ -15,7 +15,8 @@ npm run test
 ```
 
 ## Endpoints:
-* Always user Authentication header 'Bearer af24353tdsfw'
+* Always use Authentication header 'Bearer af24353tdsfw'
+   * In case it's missing or invalid the server response will be a 501 (probably should be 401 though)
 * Posts CRUD examples
 ```
 GET http://localhost:3000/api/posts
@@ -46,3 +47,4 @@ DELETE http://localhost:3000/api/posts/1
 ```
 GET http://localhost:3000/api/collection
 ```
+   * This actually retrieves all the posts, albums and users from the datasource and then select random items in order to minimize the number of HTTP requests to the datasource.
